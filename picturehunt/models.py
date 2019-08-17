@@ -46,6 +46,8 @@ class Clue(models.Model):
         self.temp_img.open(mode="rb")
         content = self.temp_img.read()
         encoded_string = base64.b64encode(content)
+        filetype = self.temp_img.url.split(".")[-1]
+        encoded_string = f"data:image/{filetype};base64, {encoded_string}"
         self.img_content = encoded_string
         super(Clue, self).save(*args, **kwargs)
 
