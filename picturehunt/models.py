@@ -30,7 +30,7 @@ class Segment(models.Model):
 class Clue(models.Model):
     text = models.TextField(null=True, blank=True)
     img = models.ImageField(upload_to="site_media", null=True, blank=True)
-    segment = models.ForeignKey('Segment', null=True, blank=True, on_delete=models.CASCADE)
+    segment = models.ForeignKey('Segment', null=True, blank=True, on_delete=models.CASCADE, related_name="clues")
     order_index = models.IntegerField(null=True, blank=True)
     solution = models.TextField(null=True, blank=True)
 
