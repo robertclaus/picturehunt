@@ -49,7 +49,7 @@ def login(request):
         default_path = random.choice(Path.objects.all())
 
         team, created_team = Team.objects.get_or_create(name=request.POST.get("team"), defaults={'path': default_path})
-        user, created = User.objects.get_or_create(name=request.POST.get("name"), current_team=team)
+        user, created = User.objects.get_or_create(name=request.POST.get("name"), current_team=team, defaults={'logged_in': True})
 
         user.logged_in = True
         user.save()
