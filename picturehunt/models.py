@@ -2,6 +2,7 @@ from django.db import models
 import base64
 from PIL import Image
 from io import BytesIO
+from django.conf import settings
 
 
 # Create your models here.
@@ -30,23 +31,6 @@ class Segment(models.Model):
         return f"{self.name} [{self.id}]"
 
 
-def scale_image(img,
-                max_dimension,
-                ):
-    original_image = Image.open(img)
-    w, h = original_image.size
-
-    w_ratio = max_dimension/w
-    h_ratio = max_dimension/h
-
-    if h_ratio > w_ratio:
-        max_size = (w * w_ratio, h * w_ratio)
-    else:
-        max_size = (w * h_ratio, h * h_ratio)
-
-    original_image.thumbnail(max_size, Image.ANTIALIAS)
-    return original_image
-
 class Clue(models.Model):
     text = models.TextField(null=True, blank=True)
     temp_img = models.ImageField(upload_to="site_media", null=True, blank=True)
@@ -61,18 +45,33 @@ class Clue(models.Model):
     def save(self, *args, **kwargs):
         # Save the image file and get the url
         super(Clue, self).save(*args, **kwargs)
-
-        # Save the image file content directly for long term storage
-        self.temp_img.open(mode="rb")
-        scaled = scale_image(self.temp_img, 100)
-        buffer = BytesIO()
-        scaled.save(buffer, format="PNG")
-        content = buffer.getvalue()
-        encoded_string = base64.b64encode(content).decode('utf-8')
-        filetype = 'png' #self.temp_img.url.split(".")[-1]
-        encoded_string = f"data:image/{filetype};base64, {encoded_string}"
-        self.img_content = encoded_string
+        self.generate_permanent_content()
         super(Clue, self).save(*args, **kwargs)
+
+    def generate_permanent_content(self):
+        max_dimension = settings.MAX_IMAGE_DIMENSION
+
+        self.temp_img.open(mode="rb")
+        original_image = Image.open(self.temp_img)
+        w, h = original_image.size
+
+        w_ratio = max_dimension / w
+        h_ratio = max_dimension / h
+
+        if h_ratio > w_ratio:
+            max_size = (w * w_ratio, h * w_ratio)
+        else:
+            max_size = (w * h_ratio, h * h_ratio)
+
+        original_image.thumbnail(max_size, Image.ANTIALIAS)
+
+        buffer = BytesIO()
+        original_image.save(buffer, format="PNG")
+        content = buffer.getvalue()
+
+        encoded_string = base64.b64encode(content).decode('utf-8')
+        encoded_string = f"data:image/png;base64, {encoded_string}"
+        self.img_content = encoded_string
 
 
 class CompletedClue(models.Model):

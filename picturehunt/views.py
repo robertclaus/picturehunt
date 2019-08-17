@@ -46,7 +46,9 @@ def index(request):
             new_clue = next_clue(user.current_team)
             user.current_team.current_clue = new_clue
             user.current_team.save()
-            return render(request, "index.html", {'clue': new_clue})
+            return render(request, "index.html", {'clue': new_clue, 'message': 'Congratulations, here is your next clue!'})
+        else:
+            return render(request, "index.html", {'clue': user.current_team.current_clue, 'message': 'That solution was not correct.'})
     else:
         clue = user.current_team.current_clue
         return render(request, "index.html", {'clue': clue})

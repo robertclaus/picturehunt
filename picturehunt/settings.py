@@ -120,5 +120,8 @@ STATIC_URL = "/static/"
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Max image dimension (will be scaled to this on upload)
+MAX_IMAGE_DIMENSION = 1000
+
 django_heroku.settings(locals())
 
