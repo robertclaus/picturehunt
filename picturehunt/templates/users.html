@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="container">
+
+
+<h2>Please Log In to View Clues</h2>
+
+<h3> Existing Users </h3>
+<ul>
+
+{% for user in users %}
+    <li>{{user.name}} -- {{user.current_team.name}}
+     <form action="/login/" method="POST">
+                     {% csrf_token %}
+                    <input hidden type="text" name="name" value="{{user.name}}"><br>
+                    <input hidden type="text" name="team" value="{{user.current_team.name}}"><br>
+                    <input type="submit" value="Login">
+    </form>
+    </li>
+{% endfor %}
+
+</ul>
+
+</div>
+
+{% endblock %}

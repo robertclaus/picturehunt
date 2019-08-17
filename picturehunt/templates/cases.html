@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="container">
+
+    <h2>Current Clue</h2>
+    {{ clue.text }}
+    <img src="{{ clue.img.url }}">
+
+<form action="/index" method="POST">
+    {% csrf_token %}
+    <input type="text" name="solution"><br>
+    <input type="submit" value="Create A New Case">
+</form>
+
+</div>
+
+{% endblock %}
