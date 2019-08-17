@@ -1,5 +1,7 @@
 from django.db import models
 import base64
+from PIL import Image
+
 
 # Create your models here.
 class User(models.Model):
@@ -27,6 +29,23 @@ class Segment(models.Model):
         return f"{self.name} [{self.id}]"
 
 
+def scale_image(img,
+                max_dimension,
+                ):
+    original_image = Image.open(img)
+    w, h = original_image.size
+
+    w_ratio = max_dimension/w
+    h_ratio = max_dimension/h
+
+    if h_ratio > w_ratio:
+        max_size = (w * w_ratio, h * w_ratio)
+    else:
+        max_size = (w * h_ratio, h * h_ratio)
+
+    original_image.thumbnail(max_size, Image.ANTIALIAS)
+    return original_image
+
 class Clue(models.Model):
     text = models.TextField(null=True, blank=True)
     temp_img = models.ImageField(upload_to="site_media", null=True, blank=True)
@@ -44,7 +63,7 @@ class Clue(models.Model):
 
         # Save the image file content directly for long term storage
         self.temp_img.open(mode="rb")
-        content = self.temp_img.read()
+        content = scale_image(self.temp_img, 100).get_value()
         encoded_string = base64.b64encode(content).decode('utf-8')
         filetype = self.temp_img.url.split(".")[-1]
         encoded_string = f"data:image/{filetype};base64, {encoded_string}"
