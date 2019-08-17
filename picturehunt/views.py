@@ -8,8 +8,13 @@ from picturehunt.models import Clue, User, Path, Team
 
 def next_clue(team):
     old_clue = team.current_clue
-    old_clue_index = old_clue.order_index
-    next_clues = Clue.objects.filter(order_index__gt=old_clue_index).order_by('order_index')
+    if old_clue:
+        old_clue_index = old_clue.order_index
+        segment = old_clue.segment
+    else:
+        old_clue_index = -1
+        segment = team.path.segment_order.first().segment
+    next_clues = Clue.objects.filter(order_index__gt=old_clue_index, segment=segment).order_by('order_index')
 
     if len(next_clues) > 0:  # Clues left in this segment
         return next_clues[0]
@@ -53,6 +58,10 @@ def login(request):
 
         user.logged_in = True
         user.save()
+
+        if created_team:
+            team.current_clue = next_clue(team)
+            team.save()
 
         request.session["user_id"] = user.id
         request.session["user_name"] = user.name
