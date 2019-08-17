@@ -23,7 +23,7 @@ def next_clue(team):
         old_segment = old_clue.segment
         old_segment_index = path.segment_order.get(segment=old_segment).index
 
-        next_segments = path.segment_order.filter(old_segment_index__gt=old_segment_index).order_by('old_segment_index')
+        next_segments = path.segment_order.filter(index__gt=old_segment_index).order_by('index')
 
         new_segment = next_segments[0]
         clues = new_segment.clues_set.all().order_by('order_index')
