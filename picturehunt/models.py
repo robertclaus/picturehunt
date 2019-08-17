@@ -1,5 +1,5 @@
 from django.db import models
-
+import base64
 
 # Create your models here.
 class User(models.Model):
@@ -29,13 +29,24 @@ class Segment(models.Model):
 
 class Clue(models.Model):
     text = models.TextField(null=True, blank=True)
-    img = models.ImageField(upload_to="site_media", null=True, blank=True)
+    temp_img_url = models.ImageField(upload_to="site_media", null=True, blank=True)
     segment = models.ForeignKey('Segment', null=True, blank=True, on_delete=models.CASCADE, related_name="clues")
     order_index = models.IntegerField(null=True, blank=True)
     solution = models.TextField(null=True, blank=True)
+    img_content = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.segment.name} - {self.order_index} [{self.id}]"
+
+    def save(self, *args, **kwargs):
+        # Save the image file and get the url
+        super(Clue, self).save(*args, **kwargs)
+
+        # Save the image file content directly for long term storage
+        with open(self.img, "rb") as image_file:
+            encoded_string = base64.b64encode(image_file.read())
+            self.img_content = encoded_string
+            super(Clue, self).save(*args, **kwargs)
 
 
 class CompletedClue(models.Model):
