@@ -66,10 +66,10 @@ class Clue(models.Model):
         self.temp_img.open(mode="rb")
         scaled = scale_image(self.temp_img, 100)
         buffer = BytesIO()
-        scaled.save(buffer, format="JPEG")
+        scaled.save(buffer, format="PNG")
         content = buffer.getvalue()
         encoded_string = base64.b64encode(content).decode('utf-8')
-        filetype = 'jpg' #self.temp_img.url.split(".")[-1]
+        filetype = 'png' #self.temp_img.url.split(".")[-1]
         encoded_string = f"data:image/{filetype};base64, {encoded_string}"
         self.img_content = encoded_string
         super(Clue, self).save(*args, **kwargs)
