@@ -3,16 +3,19 @@
 
 {% block content %}
 <div class="container">
-
+{% if clue %}
     <h2>Current Clue</h2>
     {{ clue.text }}
     <img src="{{ clue.img.url }}">
 
-<form action="" method="POST">
-    {% csrf_token %}
-    <input type="text" name="solution"><br>
-    <input type="submit" value="Try Answer">
-</form>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <input type="text" name="solution"><br>
+        <input type="submit" value="Try Answer">
+    </form>
+{% else %}
+    <h2>Congratulations, you've completed your hunt!</h2>
+{% end %}
 
 </div>
 

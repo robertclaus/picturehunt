@@ -8,20 +8,29 @@
 <h2>Please Log In to View Clues</h2>
 
 <h3> Existing Users </h3>
-<ul>
+<table style="width:100%">
 
 {% for user in users %}
-    <li>{{user.name}} -- {{user.current_team.name}}
-     <form action="/login/" method="POST">
+<tr>
+    <td>
+        <div>{{user.name}}</div>
+    </td>
+    <td>
+        <div>{{user.current_team.name}}</div>
+    </td>
+     <td>
+         <form action="/login/" method="POST">
                      {% csrf_token %}
                     <input hidden type="text" name="name" value="{{user.name}}"><br>
                     <input hidden type="text" name="team" value="{{user.current_team.name}}"><br>
                     <input type="submit" value="Login">
-    </form>
-    </li>
+        </form>
+     </td>
+
+</tr>
 {% endfor %}
 
-</ul>
+</table>
 
 </div>
 

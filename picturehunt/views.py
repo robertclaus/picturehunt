@@ -25,9 +25,12 @@ def next_clue(team):
 
         next_segment_orders = path.segment_order.filter(index__gt=old_segment_index).order_by('index')
 
-        new_segment_order = next_segment_orders[0]
-        clues = new_segment_order.segment.clues.all().order_by('order_index')
-        return clues[0]
+        if len(next_segment_orders) > 0:
+            new_segment_order = next_segment_orders[0]
+            clues = new_segment_order.segment.clues.all().order_by('order_index')
+            return clues[0]
+        else:
+            return None
 
 
 def index(request):
