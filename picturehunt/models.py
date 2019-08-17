@@ -43,10 +43,11 @@ class Clue(models.Model):
         super(Clue, self).save(*args, **kwargs)
 
         # Save the image file content directly for long term storage
-        with open(self.temp_img.url, "rb") as image_file:
-            encoded_string = base64.b64encode(image_file.read())
-            self.img_content = encoded_string
-            super(Clue, self).save(*args, **kwargs)
+        self.temp_img.open(mode="rb")
+        content = self.temp_img.read()
+        encoded_string = base64.b64encode(content)
+        self.img_content = encoded_string
+        super(Clue, self).save(*args, **kwargs)
 
 
 class CompletedClue(models.Model):
