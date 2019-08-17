@@ -8,10 +8,10 @@
     {{ clue.text }}
     <img src="{{ clue.img.url }}">
 
-<form action="/index" method="POST">
+<form action="" method="POST">
     {% csrf_token %}
     <input type="text" name="solution"><br>
-    <input type="submit" value="Create A New Case">
+    <input type="submit" value="Try Answer">
 </form>
 
 </div>
