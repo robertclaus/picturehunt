@@ -1,6 +1,7 @@
 from django.db import models
 import base64
 from PIL import Image
+from io import BytesIO
 
 
 # Create your models here.
@@ -63,9 +64,12 @@ class Clue(models.Model):
 
         # Save the image file content directly for long term storage
         self.temp_img.open(mode="rb")
-        content = scale_image(self.temp_img, 100).get_value()
+        scaled = scale_image(self.temp_img, 100)
+        buffer = BytesIO()
+        scaled.save(buffer, format="JPEG")
+        content = buffer.getvalue()
         encoded_string = base64.b64encode(content).decode('utf-8')
-        filetype = self.temp_img.url.split(".")[-1]
+        filetype = 'jpg' #self.temp_img.url.split(".")[-1]
         encoded_string = f"data:image/{filetype};base64, {encoded_string}"
         self.img_content = encoded_string
         super(Clue, self).save(*args, **kwargs)
