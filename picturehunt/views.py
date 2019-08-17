@@ -3,7 +3,7 @@ import random
 from django.shortcuts import render
 from django.shortcuts import redirect
 
-from picturehunt.models import Clue, User, Path
+from picturehunt.models import Clue, User, Path, Team
 
 
 def next_clue(team):
@@ -48,7 +48,7 @@ def login(request):
     if request.method == "POST":
         default_path = random.choice(Path.objects.all())
 
-        team, created_team = User.objects.get_or_create(name=request.POST.get("team"), defaults={'path': default_path})
+        team, created_team = Team.objects.get_or_create(name=request.POST.get("team"), defaults={'path': default_path})
         user, created = User.objects.get_or_create(name=request.POST.get("name"), current_team=team)
 
         user.logged_in = True

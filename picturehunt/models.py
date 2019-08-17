@@ -7,15 +7,24 @@ class User(models.Model):
     current_team = models.ForeignKey('Team', null=True, blank=True, on_delete=models.CASCADE)
     logged_in = models.BooleanField()
 
+    def __str__(self):
+        return f"{self.name} [{self.id}]"
+
 
 class Team(models.Model):
     name = models.TextField(null=True, blank=True)
     current_clue = models.ForeignKey('Clue', null=True, blank=True, on_delete=models.CASCADE)
     path = models.ForeignKey('Path', null=True, blank=True, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.name} [{self.id}]"
+
 
 class Segment(models.Model):
     name = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.name} [{self.id}]"
 
 
 class Clue(models.Model):
@@ -24,6 +33,9 @@ class Clue(models.Model):
     segment = models.ForeignKey('Segment', null=True, blank=True, on_delete=models.CASCADE)
     order_index = models.IntegerField(null=True, blank=True)
     solution = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.segment.name} - {self.order_index} [{self.id}]"
 
 
 class CompletedClue(models.Model):
@@ -35,6 +47,12 @@ class SegmentOrder(models.Model):
     index = models.IntegerField(null=True, blank=True)
     segment = models.ForeignKey('Segment', null=True, blank=True, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.order_index} - {self.segment.name} [{self.id}]"
+
 
 class Path(models.Model):
     segment_order = models.ManyToManyField('SegmentOrder', blank=True)
+
+    def __str__(self):
+        return f"Path [{self.id}]"
