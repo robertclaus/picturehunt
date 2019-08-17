@@ -29,7 +29,7 @@ class Segment(models.Model):
 
 class Clue(models.Model):
     text = models.TextField(null=True, blank=True)
-    temp_img_url = models.ImageField(upload_to="site_media", null=True, blank=True)
+    temp_img = models.ImageField(upload_to="site_media", null=True, blank=True)
     segment = models.ForeignKey('Segment', null=True, blank=True, on_delete=models.CASCADE, related_name="clues")
     order_index = models.IntegerField(null=True, blank=True)
     solution = models.TextField(null=True, blank=True)
@@ -43,7 +43,7 @@ class Clue(models.Model):
         super(Clue, self).save(*args, **kwargs)
 
         # Save the image file content directly for long term storage
-        with open(self.temp_img_url, "rb") as image_file:
+        with open(self.temp_img.url, "rb") as image_file:
             encoded_string = base64.b64encode(image_file.read())
             self.img_content = encoded_string
             super(Clue, self).save(*args, **kwargs)

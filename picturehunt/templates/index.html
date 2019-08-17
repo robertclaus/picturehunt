@@ -6,7 +6,7 @@
 {% if clue %}
     <h2>Current Clue</h2>
     {{ clue.text }}
-    <img src="data:{{ clue.img.url }}">
+    <img src="data:{{ clue.img_content }}">
 
     <form action="" method="POST">
         {% csrf_token %}
