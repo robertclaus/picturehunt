@@ -40,7 +40,7 @@ class Clue(models.Model):
     img_content = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.segment.name} - {self.order_index} [{self.id}]"
+        return f"{self.segment} - {self.order_index} [{self.id}]"
 
     def save(self, *args, **kwargs):
         # Save the image file and get the url
@@ -77,6 +77,12 @@ class Clue(models.Model):
 class CompletedClue(models.Model):
     clue = models.ForeignKey('Clue', null=True, blank=True, on_delete=models.CASCADE)
     team = models.ForeignKey('Team', null=True, blank=True, on_delete=models.CASCADE)
+    time = models.DateTimeField(null=True, blank=True)
+    guess = models.TextField(null=True, blank=True)
+    correct = models.BooleanField()
+
+    def __str__(self):
+        return f"{self.team} - {self.clue} - {self.guess}"
 
 
 class SegmentOrder(models.Model):
@@ -84,7 +90,7 @@ class SegmentOrder(models.Model):
     segment = models.ForeignKey('Segment', null=True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.order_index} - {self.segment.name} [{self.id}]"
+        return f"{self.index} - {self.segment} [{self.id}]"
 
 
 class Path(models.Model):
