@@ -45,8 +45,9 @@ class Clue(models.Model):
     def save(self, *args, **kwargs):
         # Save the image file and get the url
         super(Clue, self).save(*args, **kwargs)
-        self.generate_permanent_content()
-        super(Clue, self).save(*args, **kwargs)
+        if self.temp_img:
+            self.generate_permanent_content()
+            super(Clue, self).save(*args, **kwargs)
 
     def generate_permanent_content(self):
         max_dimension = settings.MAX_IMAGE_DIMENSION

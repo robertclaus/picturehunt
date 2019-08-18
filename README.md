@@ -43,3 +43,12 @@ or
 For more information about using Python on Heroku, see these Dev Center articles:
 
 - [Python on Heroku](https://devcenter.heroku.com/categories/python)
+
+## Setting up a puzzle hunt
+1. Deploy to heroku
+2. Create an admin user for Django by logging into Heroku and opening bash.  Then run python manage.py createsuperuser.
+3. Log into Django and create all the data:
+
+## Creating the content
+1. Create your segments - representing sets of clues in an area that's walking distance.
+2. Create the clues for each segment.  Each clue can optionally have text and an image.  The order of clues is determined by the order_index field (lower indexes are presented first).  When uploading an image, it will be converted into base64 content in the content field automatically, so just upload an image and save it.  Each clue must also have a solution!
