@@ -122,7 +122,7 @@ def dashboard(request):
 
     for team in teams:
 
-        team_member_names = list(team.user_set.all().value_list('name', flat=True))
+        team_member_names = list(team.user_set.all().values_list('name', flat=True))
 
         current_clue = team.current_clue
         current_guesses = CompletedClue.objects.all().filter(team=team, clue=current_clue).count()
