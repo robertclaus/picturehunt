@@ -149,4 +149,4 @@ def dashboard(request):
         }
         context['team_context'].append(team_context)
 
-    render(request, "dashboard.html", context)
+    return render(request, "dashboard.html", context)
