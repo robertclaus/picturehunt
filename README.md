@@ -52,3 +52,5 @@ For more information about using Python on Heroku, see these Dev Center articles
 ## Creating the content
 1. Create your segments - representing sets of clues in an area that's walking distance.
 2. Create the clues for each segment.  Each clue can optionally have text and an image.  The order of clues is determined by the order_index field (lower indexes are presented first).  When uploading an image, it will be converted into base64 content in the content field automatically, so just upload an image and save it.  Each clue must also have a solution!
+3. Create your segment orderings.  These give segments an order that they must be completed in a given puzzle.  For example, if a segment should show up as the 3rd segment in your puzzle, create a segment ordering for that segment with an index of "3".
+4. Create your paths.  These are a set of segment orderings.

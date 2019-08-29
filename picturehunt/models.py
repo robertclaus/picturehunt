@@ -36,6 +36,7 @@ class Clue(models.Model):
     temp_img = models.ImageField(upload_to="site_media", null=True, blank=True)
     segment = models.ForeignKey('Segment', null=True, blank=True, on_delete=models.CASCADE, related_name="clues")
     order_index = models.IntegerField(null=True, blank=True)
+    question = models.TextField(null=True, blank=True)
     solution = models.TextField(null=True, blank=True)
     img_content = models.TextField(null=True, blank=True)
 

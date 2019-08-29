@@ -1,9 +1,10 @@
+from datetime import datetime
 import random
 
 from django.shortcuts import render
 from django.shortcuts import redirect
 
-from picturehunt.models import Clue, User, Path, Team
+from picturehunt.models import Clue, User, Path, Team, CompletedClue
 
 
 def next_clue(team):
@@ -37,12 +38,24 @@ def index(request):
     user_id = request.session.get("user_id")
     if not user_id:
         return redirect(login)
-
-    user = User.objects.get(id=user_id)
+    try:
+        user = User.objects.get(id=user_id)
+    except Exception:
+        return redirect(logout)
 
     if request.method == "POST":
         solution = request.POST.get("solution")
-        if solution.lower() == user.current_team.current_clue.solution.lower():
+        is_correct = solution.lower().lstrip().rstrip() in user.current_team.current_clue.solution.lower().split(";")
+
+        CompletedClue.objects.create(
+            clue=user.current_team.current_clue,
+            team=user.current_team,
+            time=datetime.now(),
+            guess=solution,
+            correct=is_correct,
+        )
+
+        if is_correct:
             new_clue = next_clue(user.current_team)
             user.current_team.current_clue = new_clue
             user.current_team.save()
@@ -79,9 +92,12 @@ def login(request):
 
 
 def logout(request):
-    user = User.objects.get(id=request.session["user_id"])
-    user.logged_in = False
-    user.save()
+    try:
+        user = User.objects.get(id=request.session["user_id"])
+        user.logged_in = False
+        user.save()
+    except Exception:
+        pass
 
     del request.session["user_id"]
     del request.session["user_name"]

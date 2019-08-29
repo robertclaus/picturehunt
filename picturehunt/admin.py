@@ -17,7 +17,7 @@ class SegmentAdmin(admin.ModelAdmin):
 
 
 class ClueAdmin(admin.ModelAdmin):
-    pass
+    exclude = ('img_content',)
 
 
 class CompletedClueAdmin(admin.ModelAdmin):
