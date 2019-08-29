@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import random
 
 from django.shortcuts import render
@@ -128,7 +128,10 @@ def dashboard(request):
 
         current_clue = team.current_clue
         current_guesses = CompletedClue.objects.all().filter(team=team, clue=current_clue).count()
-        time_to_clue = datetime.now(timezone.utc) - CompletedClue.objects.all().latest('time').time
+        try:
+            time_to_clue = datetime.now(timezone.utc) - CompletedClue.objects.all().filter(team=team).latest('time').time
+        except Exception:
+            time_to_clue = timedelta()
         next_clue_for_team = next_clue(team)
 
         #previous_clue = previous_clue(current_clue)
