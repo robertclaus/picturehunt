@@ -103,3 +103,48 @@ def logout(request):
     del request.session["user_name"]
     del request.session["team_name"]
     return redirect(login)
+
+def dashboard(request):
+    user_id = request.session.get("user_id")
+    if not user_id:
+        return redirect(login)
+    try:
+        user = User.objects.get(id=user_id)
+    except Exception:
+        return redirect(logout)
+
+    if not user.is_admin:
+        return redirect(index)
+
+    teams = Team.objects.all()
+
+    context = {'team_context': []}
+
+    for team in teams:
+
+        team_member_names = list(team.user_set.all().value_list('name', flat=True))
+
+        current_clue = team.current_clue
+        current_guesses = CompletedClue.objects.all().filter(team=team, clue=current_clue).count()
+        time_to_clue = datetime.now() - CompletedClue.objects.all().latest('time').time
+        next_clue = next_clue(current_clue)
+
+        #previous_clue = previous_clue(current_clue)
+        #previous_guesses = CompletedClue.objects.all().filter(team=team, clue=previous_clue).count()
+
+        team_context = {
+            'name': team.name,
+            'team_member_names': team_member_names,
+            'current_clue': current_clue,
+            'next_clue': next_clue,
+            'current_question': current_clue.question,
+            'current_solution': current_clue.solution,
+            'current_image': current_clue.img_content,
+            'current_guesses': current_guesses,
+            'time_to_clue': time_to_clue,
+            'next_image': next_clue.img_content,
+
+        }
+        context['teams'].append(team_context)
+
+    render(request, "dashboard.html", context)

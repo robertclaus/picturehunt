@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="container">
+
+{% for team in teams %}
+    <h1>{{team['name']}}</h1>
+    <h2>Members:</h2>
+    {% for name in team['team_member_names'] %}
+        <h3>name</h3>
+    {% endfor %}
+
+    <h2>Time on Clue: {{team['time_to_clue']}}</h2>
+    <h2>Current Clue: {{team['current_clue']}}</h2>
+    <h2>Current Question: {{team['current_question']}}</h2>
+    <h2>Current Solution: {{team['current_solution']}}</h2>
+    <img src="data:{{ team['current_image'] }}" style="height:100px">
+    <h2>Next Clue: {{team['next_clue']}}</h2>
+{% endfor %}
+
+</div>
+
+{% endblock %}

@@ -24,6 +24,7 @@ urlpatterns = [
     path("", picturehunt.views.index, name="index"),
     path("login/", picturehunt.views.login, name="login"),
     path("logout/", picturehunt.views.logout, name="logout"),
+    path("dashboard/", picturehunt.views.dashboard, name="dashboard")
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

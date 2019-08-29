@@ -10,6 +10,7 @@ class User(models.Model):
     name = models.TextField(null=True, blank=True)
     current_team = models.ForeignKey('Team', null=True, blank=True, on_delete=models.CASCADE)
     logged_in = models.BooleanField()
+    is_admin = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.name} [{self.id}]"
@@ -99,4 +100,4 @@ class Path(models.Model):
     segment_order = models.ManyToManyField('SegmentOrder', blank=True)
 
     def __str__(self):
-        return f"Path [{self.id}]"
+        return f"Path: {list(self.segment_order.all().order_by('index').values_list('segment__name', flat=True))} [{self.id}]"
