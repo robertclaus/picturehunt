@@ -105,6 +105,7 @@ def logout(request):
     del request.session["team_name"]
     return redirect(login)
 
+
 def dashboard(request):
     user_id = request.session.get("user_id")
     if not user_id:
@@ -128,7 +129,7 @@ def dashboard(request):
         current_clue = team.current_clue
         current_guesses = CompletedClue.objects.all().filter(team=team, clue=current_clue).count()
         time_to_clue = datetime.now(timezone.utc) - CompletedClue.objects.all().latest('time').time
-        next_clue = next_clue(current_clue)
+        next_clue_for_team = next_clue(team)
 
         #previous_clue = previous_clue(current_clue)
         #previous_guesses = CompletedClue.objects.all().filter(team=team, clue=previous_clue).count()
@@ -137,13 +138,13 @@ def dashboard(request):
             'name': team.name,
             'team_member_names': team_member_names,
             'current_clue': current_clue,
-            'next_clue': next_clue,
+            'next_clue': next_clue_for_team,
             'current_question': current_clue.question,
             'current_solution': current_clue.solution,
             'current_image': current_clue.img_content,
             'current_guesses': current_guesses,
             'time_to_clue': time_to_clue,
-            'next_image': next_clue.img_content,
+            'next_image': next_clue_for_team.img_content,
 
         }
         context['teams'].append(team_context)
