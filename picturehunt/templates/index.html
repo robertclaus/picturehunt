@@ -10,10 +10,13 @@
     <h2>Current Clue</h2>
     <br/>
 
+    {% if clue.text %}
     {{ clue.text }}
+    {% endif %}
     <br/>
-
+    {% if clue.img_content %}
     <img src="data:{{ clue.img_content }}">
+    {% endif %}
     <br/>
 
     <form action="" method="POST">
