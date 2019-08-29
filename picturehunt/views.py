@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 import random
 
 from django.shortcuts import render
@@ -126,7 +126,7 @@ def dashboard(request):
 
         current_clue = team.current_clue
         current_guesses = CompletedClue.objects.all().filter(team=team, clue=current_clue).count()
-        time_to_clue = datetime.now() - CompletedClue.objects.all().latest('time').time
+        time_to_clue = datetime.now(timezone.utc) - CompletedClue.objects.all().latest('time').time
         next_clue = next_clue(current_clue)
 
         #previous_clue = previous_clue(current_clue)
