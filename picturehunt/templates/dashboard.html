@@ -4,7 +4,7 @@
 {% block content %}
 <div class="container">
 
-{% for team in teams %}
+{% for team in team_context %}
     <h1>{{team['name']}}</h1>
     <h2>Members:</h2>
     {% for name in team['team_member_names'] %}

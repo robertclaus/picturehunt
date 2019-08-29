@@ -147,6 +147,6 @@ def dashboard(request):
             'next_image': next_clue_for_team.img_content,
 
         }
-        context['teams'].append(team_context)
+        context['team_context'].append(team_context)
 
     render(request, "dashboard.html", context)
