@@ -50,6 +50,7 @@ def index(request):
         CompletedClue.objects.create(
             clue=user.current_team.current_clue,
             team=user.current_team,
+            user=user,
             time=datetime.now(),
             guess=solution,
             correct=is_correct,

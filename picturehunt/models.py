@@ -80,6 +80,7 @@ class Clue(models.Model):
 class CompletedClue(models.Model):
     clue = models.ForeignKey('Clue', null=True, blank=True, on_delete=models.CASCADE)
     team = models.ForeignKey('Team', null=True, blank=True, on_delete=models.CASCADE)
+    user = models.ForeignKey('User', null=True, blank=True, on_delete=models.CASCADE)
     time = models.DateTimeField(null=True, blank=True)
     guess = models.TextField(null=True, blank=True)
     correct = models.BooleanField()
