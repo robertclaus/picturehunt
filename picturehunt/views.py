@@ -147,7 +147,7 @@ def dashboard(request):
             'current_image': current_clue.img_content if current_clue else None,
             'current_guesses': current_guesses,
             'time_to_clue': time_to_clue,
-            'next_image': next_clue_for_team.img_content,
+            'next_image': next_clue_for_team.img_content if next_clue_for_team else None,
 
         }
         context['team_context'].append(team_context)
